@@ -10,7 +10,7 @@
     "dev": "nodemon --exec babel-node src/server.js"
   },
   "author": "Jehwan Kwak",
-  "license": "Sasang Smart Hospital",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
     "morgan": "^1.10.0"
@@ -20,5 +20,10 @@
     "@babel/node": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
     "nodemon": "^2.0.20"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/Jehwan-Kwak/wetube-reloaded/issues"
+  },
+  "homepage": "https://github.com/Jehwan-Kwak/wetube-reloaded#readme",
+  "main": "index.js"
 }
