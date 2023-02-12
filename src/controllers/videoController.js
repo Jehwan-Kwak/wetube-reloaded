@@ -27,11 +27,11 @@ export const postEdit = async (req,res) => {
     if(!video) {
         return res.render("404", {pageTitle: "Video not found"});
     }
-    video.title = title;
-    video.description = description;
-    video.hashtags = hashtags
-        .split(",")
-        .map((word) => (word.startsWith("#") ? word :`#${word}`));
+    await Video.findByIdAndUpdate(id, {
+        title,
+        description,
+        hashtags: Video.formatHashtags(hashtags)
+    })
     await video.save();
     return res.redirect(`/videos/${id}`);
 };
@@ -46,7 +46,7 @@ export const postUpload = async (req,res) => {
     await Video.create({
         title,
         description,
-        hashtags: hashtags.split(",").map((word.startsWith("#") ? word :`#${word}`))
+        hashtags: Video.formatHashtags(hashtags)
     });
     return res.redirect("/");
     } catch(error) {
@@ -56,3 +56,14 @@ export const postUpload = async (req,res) => {
         });
     }
 };
+
+export const deleteVideo = async (req, res) => {
+    const { id } = req.params;
+    await Video.findByIdAndDelete(id);
+    res.redirect("/");
+}
+
+export const search = (req, res) => {
+    const { keyword } = req.query;
+    return res.render("search", {pageTitle: "Search"});
+}
