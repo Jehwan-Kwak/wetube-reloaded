@@ -1,0 +1,9 @@
+extends base
+
+block content 
+    form(method="post")
+        input(type="text", name="username", placeholder="Username", required value=loggedInUser.username)
+        input(type="email", name="email", placeholder="E-mail", required value=loggedInUser.email)
+        input(type="text", name="name", placeholder="Name", required value=loggedInUser.name)
+        input(type="text", name="location", placeholder="Location" value=loggedInUser.location)
+        input(type="submit", value="Edit porfile")

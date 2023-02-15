@@ -27,5 +27,5 @@
     "url": "https://github.com/Jehwan-Kwak/wetube-reloaded/issues"
   },
   "homepage": "https://github.com/Jehwan-Kwak/wetube-reloaded#readme",
-  "main": "index.js"
+  "main": "server.js"
 }

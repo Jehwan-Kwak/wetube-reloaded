@@ -26,7 +26,7 @@ export const getLogin = (req,res) => res.render("login", {pageTitle: "Login"});
 export const postLogin = async (req,res) => {
     const {username, password} = req.body;
     const pageTitle = "Login"
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username, socialOnly: false });
     if (!user) {
         res.status(400).render("login", {pageTitle, errorMessage: " An account with this username does not exist."});
     }
@@ -58,17 +58,62 @@ export const finishGithubLogin = async (req, res) => {
         client_secret: process.env.GH_SECRET,
         code: req.query.code,
     };
-    const params = new URLSearchParams(client).toString ();
+    const params = new URLSearchParams(config).toString ();
     const finalUrl = `${baseUrl}?${params}`;
-    const data = await fetch(finalUrl,
-       {method="post"},
+    const tokenRequest = await (await fetch(finalUrl,
+       {method: "post",
        headers: {
-        Accept: application/json,
-       });
-    const json = await data.json();
+        Accept: "application/json",
+       }
+    })).json();
+    if ("access_token" in tokenRequest) {
+        const {access_token} = tokenRequest;
+        const userData = await (await fetch("https://api.github.com/user", {
+            headers : {
+                Authorization : `token ${access_token}`
+            }
+        })).json();
+        const emailData = await (await fetch("https://api.github.com/user/emails", {
+            headers : {
+                Authorization : `token ${access_token}`
+            }
+        })).json();
+        const emailObj = emailData.find((email) => email.primary === true && email.verified === true);
+        if (!emailObj) {
+            return res.redirect("/login");
+        }
+        let user = await User.findOne({email : emailObj.email});
+        if (!user) {
+            const user = await User.create({
+                avatarUrl: userData.avatar_url,
+                name: userData.name,
+                username: userData.login,
+                password: " ",
+                email: emailObj.email,
+                location: userData.location,
+                socialOnly: true,
+            })
+            }
+            req.session.loggedIn = true;
+            req.session.user = user;
+            return res.redirect("/"); 
+        } else {
+        res.redirect("/login");
+        }
 };
 
+export const logout = (req,res) => {
+    req.session.destroy();
+    return res.redirect("/");
+}; 
+
+export const getEdit = (req, res) => {
+    res.render("edit-profile", {pageTitle:"Edit profile"});
+}
+export const postEdit = (req, res) => {
+    res.render("edit-profile", {pageTitle:"Edit profile"});
+}
 export const edit = (req,res) => res.send("Edit User");
 export const remove = (req,res) => res.send("Delete User");
-export const logout = (req,res) => res.send("Logout");
 export const see = (req,res) => res.send("See User");
+
