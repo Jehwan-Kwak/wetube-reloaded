@@ -4,7 +4,7 @@ export const home = async (req,res) => {
     const videos = await Video.find({}).sort({createdAt:"asc"});
     return res.render("home", {pageTitle:"Home", videos});
 };
-    export const watch = async (req,res) => {
+export const watch = async (req,res) => {
     const { id } = req.params;
     const video = await Video.findById(id);
     if(!video) {
@@ -43,7 +43,9 @@ export const getUpload = (req,res) => {
 export const postUpload = async (req,res) => {
     try {
     const {title, description, hashtags} = req.body;
+    const { path: videoUrl} = req.file;
     await Video.create({
+        videoUrl,
         title,
         description,
         hashtags: Video.formatHashtags(hashtags)

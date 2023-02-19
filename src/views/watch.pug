@@ -1,8 +1,9 @@
 extends base
 
 block content
+    video(src="/" + video.videoUrl, controls)
     div
-        p=video.title
+        p=video.description
         small=video.createdAt
     a(href=`${video.id}/edit`) Edit Video &rarr;
     br
