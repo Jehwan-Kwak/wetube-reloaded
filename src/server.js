@@ -29,9 +29,10 @@ app.use((req, res, next) => {
 
 app.use(localsMiddleware);
 
+app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
-app.use("/uploads", express.static("uploads"));
 
 export default app;
