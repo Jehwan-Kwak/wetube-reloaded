@@ -5,6 +5,7 @@ export const home = async (req,res) => {
     const videos = await Video.find({})
         .sort({createdAt:"asc"})
         .populate("owner");
+    console.log(videos);
     return res.render("home", {pageTitle:"Home", videos});
 };
 export const watch = async (req,res) => {
@@ -55,8 +56,6 @@ export const postUpload = async (req,res) => {
     const {user: {_id},} = req.session;
     const {title, description, hashtags} = req.body;
     const { video, thumb} = req.files;
-    console.log(video);
-    console.log(thumb);
     try {
         const newVideo = await Video.create({
         fileUrl: video[0].path,

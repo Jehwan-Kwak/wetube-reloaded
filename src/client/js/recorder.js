@@ -68,7 +68,7 @@ const handleStart = (event) => {
         actionBtn.addEventListener("click", handleDownload);
     };
     recorder.start();
-    setTimeout(() => {recorder.stop()}, 3000);
+    setTimeout(() => {recorder.stop()}, 4000);
 };
 
 const init = async () => {
