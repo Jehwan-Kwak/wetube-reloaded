@@ -1,5 +1,6 @@
 import Video from "../models/Video";
 import User from "../models/User";
+import Comment from "../models/Comment";
 
 export const home = async (req,res) => {
     const videos = await Video.find({})
@@ -119,8 +120,17 @@ export const resisterView = async (req, res) => {
     return res.sendStatus(200);
 }
 
-export const createComment = (req, res) => {
-    console.log(req.body);
-    console.log(req.params);
-    return res.end();
+export const createComment = async (req, res) => {
+    const {session : {user}, params: {id}, body : {text},} = req;
+    const video = await Video.findById(id);
+    if (!video) {
+        return res.sandStatus(404);
+    }
+    const comment = await Comment.create({
+        text,
+        owner : user._id,
+        video : id,
+    });
+    return res.sendStatus(201);
 }
+
