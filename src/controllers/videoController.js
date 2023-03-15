@@ -6,12 +6,12 @@ export const home = async (req,res) => {
     const videos = await Video.find({})
         .sort({createdAt:"asc"})
         .populate("owner");
-    console.log(videos);
     return res.render("home", {pageTitle:"Home", videos});
 };
 export const watch = async (req,res) => {
     const { id } = req.params;
-    const video = await Video.findById(id).populate("owner");
+    const video = await Video.findById(id).populate("owner").populate("comments");
+    console.log(video);
     if(!video) {
         return res.status(404).render("404", {pageTitle:`Video not found`});
     }
@@ -131,6 +131,8 @@ export const createComment = async (req, res) => {
         owner : user._id,
         video : id,
     });
+    video.comments.push(comment._id);
+    video.save();
     return res.sendStatus(201);
 }
 
