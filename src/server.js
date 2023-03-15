@@ -23,6 +23,7 @@ app.use((req, res, next) => {
 app.use(flash());
 app.use(logger);
 app.use(express.urlencoded({extended : true}));
+app.use(express.json());
 app.use(session({
     secret: process.env.COOKIES_SECRET,
     resave: false,
