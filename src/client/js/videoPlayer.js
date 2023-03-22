@@ -105,6 +105,15 @@ const handleEnded = () => {
     });
 }
 
+const handleKeyup = (event) => {
+    if (event.keyCode == 32 && event.target == document.body) {   
+        handlePlayClick();
+    }
+}
+
+const handleVideoEnded = () => {
+    playBtnIcon.classList = "fas fa-play";
+}
 
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
@@ -117,4 +126,5 @@ videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeLine.addEventListener("input", handleTimeLine);
 fullScreenBtn.addEventListener("click", handleFullScreen);
 video.addEventListener("click", handlePlayClick);
-document.addEventListener("keyup", (event) => {if(event.key === " ") { handlePlayClick();}});
+document.addEventListener("keyup", handleKeyup);
+video.addEventListener("ended", handleVideoEnded);

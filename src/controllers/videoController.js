@@ -11,7 +11,6 @@ export const home = async (req,res) => {
 export const watch = async (req,res) => {
     const { id } = req.params;
     const video = await Video.findById(id).populate("owner").populate("comments");
-    console.log(video);
     if(!video) {
         return res.status(404).render("404", {pageTitle:`Video not found`});
     }
@@ -131,8 +130,22 @@ export const createComment = async (req, res) => {
         owner : user._id,
         video : id,
     });
-    video.comments.push(comment._id);
+    await video.comments.push(comment._id);
     video.save();
+    console.log(video.comments);
     return res.status(201).json({newCommentId : comment._id});
 }
 
+export const deleteComment = async (req, res) => {
+    const { params: {id}, body : {commentId}} = req;
+    const video = await Video.findById(id);
+    if (!video) {
+        return res.sandStatus(404);
+    }
+    //코멘트를 삭제시 코멘트 아이디가 비디오 DB commments에 쌓이는 것을 막아줌.
+    await video.updateOne({$pull: {comments : commentId}});
+    video.save();
+    await Comment.findByIdAndDelete(commentId);
+
+    return res.sendStatus(200);
+}
