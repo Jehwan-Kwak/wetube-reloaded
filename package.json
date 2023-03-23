@@ -6,6 +6,10 @@
     "type": "git",
     "url": "git+https://github.com/Jehwan-Kwak/wetube-reloaded.git"
   },
+  "engines": {
+    "node": "18.14.0",
+    "npm": "9.3.1"
+  },
   "scripts": {
     "start": "node build/init.js",
     "build": "npm run build:server && npm run build:assets",
