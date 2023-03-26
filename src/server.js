@@ -16,10 +16,12 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 
 app.use((req, res, next) => {
-    res.header("Cross-Origin-Embedder-Policy", "require-corp");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.header("Cross-Origin-Embedder-Policy", "credentialless");
     res.header("Cross-Origin-Opener-Policy", "same-origin");
+    res.header("Access-Control-Allow-Credentials", true);
     next();
-    }); 
+  });
 app.use(flash());
 app.use(logger);
 app.use(express.urlencoded({extended : true}));
